@@ -1,23 +1,28 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StackNavigator } from 'react-navigation';
+import TodoList from './components/TodoList';
+import { Router, Scene, Stack } from 'react-native-router-flux';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import { Dimensions } from 'react-native';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
+const App = () => (
+
+  <Provider store={store}>
+    <Router>
+      <Stack key="root">
+        <Scene key="home" component={TodoList} initial/>
+      </Stack>
+    </Router>
+  </Provider>
+);
+
+export default App;
+
+export function getWidth(){
+  return Dimensions.get('window').width;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export function getHeight(){
+  return Dimensions.get('window').height;
+}

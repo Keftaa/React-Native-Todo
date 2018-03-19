@@ -1,46 +1,56 @@
 import React, { component } from 'react';
+import Expo, { SQLite } from 'expo';
 
-public class Database  {
 
-    function fetchTasks(){
-      return new Promise( (resolve) => {
-        Database.getConnection().transaction(tx => {
+var database_name = "db.db";
+var database_version = "1.0";
+var database_displayname = "db";
+var database_size = 200000;
+const conn = SQLite.openDatabase(database_name);
+
+class Database  {
+
+    fetchTasks(){
+      return new Promise( (resolve, reject) => {
+        conn.transaction(tx => {
           tx.executeSql(
             "SELECT * FROM task;", [],
             function success(transaction, resultSet){
               resolve(resultSet.rows._array);
             },
             function fail(transaction, error){
-              console.log('bad', error);
+              reject(error.message);
             }
           );
         });
       });
     }
 
-    function insertTask(taskText){
-      this.db.transaction(
-         tx => {
-           tx.executeSql('INSERT INTO task (text) VALUES (?)', [taskText],
-           function success(transaction, resultSet){
-             tx.executeSql('SELECT * FROM task WHERE id = ?', [resultSet.insertId],
-               function success(transaction, resultSet){
-
-                 console.log('task saved in db', resultSet.rows._array[0]);
-                 return resultSet.rows._array[0];
-               }, function fail(transaction, error){
-                 console.log('a goddamned error');
-               }
-             )
-
-           },
-           function fail(transaction, error){
-             console.log('failed to insert', error);
-           });
-         }
-       );
-       Keyboard.dismiss();
-       Actions.home();
+     insertTask(taskText){
+      return new Promise((resolve, reject) => {
+        conn.transaction(
+           tx => {
+             tx.executeSql('INSERT INTO task (text) VALUES (?)', [taskText],
+             function success(transaction, resultSet){
+               resolve(resultSet.insertId);
+             },
+             function fail(transaction, error){
+               reject(error.message);
+             });
+           }
+         );
+      })
    }
 
 }
+
+
+
+conn.transaction(tx => {
+  tx.executeSql(
+    'CREATE TABLE IF NOT EXISTS task ( id	INTEGER PRIMARY KEY AUTOINCREMENT, text	TEXT NOT NULL DEFAULT "No Text" );'
+  );
+});
+
+const database = new Database();
+module.exports = database;

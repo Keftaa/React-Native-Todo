@@ -1,12 +1,11 @@
-import todosReducer from '../reducers/todosReducer';
-import globalStateReducer from '../reducers/globalStateReducer';
+import taskListReducer from '../reducers/taskListReducer';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from './sagas';
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(combineReducers({todos: todosReducer, global: globalStateReducer}), applyMiddleware(sagaMiddleware));
+const store = createStore(combineReducers({taskList: taskListReducer}), applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(rootSaga)
 /*
 DISPATCH EXAMPLE:

@@ -1,4 +1,5 @@
 export function fetchTasksAction(){
+  console.log('Action: fetch tasks');
   return (
     {
       type: 'FETCH_TASKS'
@@ -7,6 +8,7 @@ export function fetchTasksAction(){
 }
 
 export function fetchTasksSuccessAction(tasks){
+  console.log('Action: fetch tasks success');
   return (
     {
       type: 'FETCH_TASKS_SUCCESS',
@@ -16,6 +18,7 @@ export function fetchTasksSuccessAction(tasks){
 }
 
 export function fetchTasksFailAction(errorMessage){
+  console.log('Action: fetch fail', errorMessage);
   return (
     {
       type: 'FETCH_TASKS_FAIL',
@@ -25,6 +28,7 @@ export function fetchTasksFailAction(errorMessage){
 }
 
 export function createTaskAction(text){
+  console.log('Action: create task');
   return (
     {
       type: 'CREATE_TASK',
@@ -34,6 +38,7 @@ export function createTaskAction(text){
 }
 
 export function createTaskSuccessAction(taskId){
+  console.log('Action: create task success');
   return (
     {
       type: 'CREATE_TASK_SUCCESS',
@@ -43,6 +48,7 @@ export function createTaskSuccessAction(taskId){
 }
 
 export function createTaskFailAction(errorMessage){
+  console.log('Action: create fail');
   return (
     {
       type: 'CREATE_TASK_FAIL',

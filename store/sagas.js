@@ -1,5 +1,4 @@
 import { call, put, takeEvery, takeLatest, fork } from 'redux-saga/effects'
-import Database from '../database';
 import {Keyboard} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Database from '../Database';
@@ -28,31 +27,18 @@ function* watchCreateTask(){
 
 function* createTaskWorker(action) {
    try {
-      const task = yield call(Database.insertTask, action.taskText);
+      const task = yield call(Database.insertTask, action.text);
       yield put(createTaskSuccessAction(task.id));
+      yield put(fetchTasksAction());
    } catch (e) {
      yield put(createTaskFailAction(e.message));
    }
 }
 
-
-function* updateTaskText(action) {
-  console.log('update task text saga', action.taskText);
-  yield put({type: "UPDATE_TASK_TEXT_SUCCEEDED", taskText: action.taskText});
-   // try {
-   //    const task = yield call(saveTaskInDatabase, action.taskText);
-   //    yield put({type: "SAVE_NEW_TASK_SUCCEEDED", task: actio});
-   // } catch (e) {
-   //    yield put({type: "SAVE_NEW_TASK_FAILED", message: e.message});
-   // }
-}
-
-
 function* rootSaga () {
     yield [
-        fork(fetchTasksSaga), // saga1 can also yield [ fork(actionOne), fork(actionTwo) ]
-        fork(addTaskSaga),
-        fork(updateTaskTextSaga)
+        fork(watchFetchTasks),
+        fork(watchCreateTask),
     ];
 }
 
