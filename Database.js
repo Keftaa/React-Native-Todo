@@ -42,6 +42,28 @@ class Database  {
       })
    }
 
+   deleteTasks(taskList){
+     var taskListToSqlWhere = '';
+     for(task of taskList){
+       taskListToSqlWhere += task.id+',';
+     }
+     taskListToSqlWhere = taskListToSqlWhere.substring(0, taskListToSqlWhere.length - 1);
+     return new Promise((resolve, reject) => {
+       conn.transaction(
+          tx => {
+            tx.executeSql('DELETE FROM task WHERE id IN ('+taskListToSqlWhere+')', [],
+            function success(transaction, resultSet){
+              console.log('tasks supposedly deleted');
+              resolve();
+            },
+            function fail(transaction, error){
+              reject(error.message);
+            });
+          }
+        );
+     })
+   }
+
 }
 
 

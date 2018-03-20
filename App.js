@@ -4,9 +4,10 @@ import TodoList from './components/TodoList';
 import { Router, Scene, Stack } from 'react-native-router-flux';
 import { Provider } from 'react-redux';
 import store from './store/store';
-import { Dimensions } from 'react-native';
+import { Dimensions, StatusBar } from 'react-native';
 
 const App = () => (
+
 
   <Provider store={store}>
     <Router>

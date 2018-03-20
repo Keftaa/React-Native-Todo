@@ -4,7 +4,8 @@ import { Actions } from 'react-native-router-flux';
 import Database from '../Database';
 import {
   fetchTasksAction, fetchTasksSuccessAction, fetchTasksFailAction,
-  createTaskAction, createTaskSuccessAction, createTaskFailAction
+  createTaskAction, createTaskSuccessAction, createTaskFailAction,
+  deleteSelectedTasksAction, deleteSelectedTasksSuccessAction, deleteSelectedTasksFailAction
 
 } from '../actions/taskActions';
 
@@ -35,10 +36,25 @@ function* createTaskWorker(action) {
    }
 }
 
+function* watchDeleteSelectedTasks(){
+  yield takeEvery("DELETE_SELECTED_TASKS", deleteSelectedTasksWorker);
+}
+
+function* deleteSelectedTasksWorker(action) {
+   try {
+      yield call(Database.deleteTasks, action.selectedTasks);
+      yield put(deleteSelectedTasksSuccessAction());
+      yield put(fetchTasksAction());
+   } catch (e) {
+     yield put(deleteSelectedTasksFailAction(e.message));
+   }
+}
+
 function* rootSaga () {
     yield [
         fork(watchFetchTasks),
         fork(watchCreateTask),
+        fork(watchDeleteSelectedTasks),
     ];
 }
 

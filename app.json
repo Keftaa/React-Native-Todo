@@ -1,5 +1,11 @@
-{
-  "expo": {
-    "sdkVersion": "25.0.0"
-  }
-}
+ {
+   "expo": {
+    "name": "Todo",
+    "version": "1.0.0",
+    "slug": "todo",
+    "sdkVersion": "25.0.0",
+    "android": {
+      "package": "com.adnan.todo"
+    }
+   }
+ }

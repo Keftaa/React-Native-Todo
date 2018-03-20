@@ -56,3 +56,53 @@ export function createTaskFailAction(errorMessage){
     }
   )
 }
+
+export function selectTaskAction(task){
+  console.log('Action: select task');
+  return (
+    {
+      type: 'SELECT_TASK',
+      task: task
+    }
+  )
+}
+
+export function deselectTaskAction(task){
+  console.log('Action: deselect task');
+  return (
+    {
+      type: 'DESELECT_TASK',
+      task: task
+    }
+  )
+}
+
+export function deleteSelectedTasksAction(selectedTasks){
+  console.log('Action: delete selected tasks');
+  return (
+    {
+      type: 'DELETE_SELECTED_TASKS',
+      selectedTasks: selectedTasks
+    }
+  )
+}
+
+
+export function deleteSelectedTasksSuccessAction(){
+  console.log('Action: delete selected tasks success');
+  return (
+    {
+      type: 'DELETE_SELECTED_TASKS_SUCCESS',
+    }
+  )
+}
+
+export function deleteSelectedTasksFailAction(errorMessage){
+  console.log('Action: delete selected tasks fail');
+  return (
+    {
+      type: 'DELETE_SELECTED_TASKS_FAIL',
+      errorMessage: errorMessage
+    }
+  )
+}
