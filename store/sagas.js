@@ -29,8 +29,9 @@ function* watchCreateTask(){
 function* createTaskWorker(action) {
    try {
       const task = yield call(Database.insertTask, action.text);
-      yield put(createTaskSuccessAction(task.id));
-      yield put(fetchTasksAction());
+      console.log(task);
+      yield put(createTaskSuccessAction(task));
+    //  yield put(fetchTasksAction());
    } catch (e) {
      yield put(createTaskFailAction(e.message));
    }
@@ -42,9 +43,10 @@ function* watchDeleteSelectedTasks(){
 
 function* deleteSelectedTasksWorker(action) {
    try {
+      var deletedTasks = [].concat(action.selectedTasks);
       yield call(Database.deleteTasks, action.selectedTasks);
-      yield put(deleteSelectedTasksSuccessAction());
-      yield put(fetchTasksAction());
+      yield put(deleteSelectedTasksSuccessAction(deletedTasks));
+      //yield put(fetchTasksAction());
    } catch (e) {
      yield put(deleteSelectedTasksFailAction(e.message));
    }

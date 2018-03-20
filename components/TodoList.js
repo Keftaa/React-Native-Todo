@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right,
 Body, Icon, Text, List, ListItem, Input } from 'native-base';
 import Database from '../Database';
-import { FlatList, ListView, ScrollView, TouchableHighlight, Alert, View, KeyboardAvoidingView, StatusBar } from 'react-native';
+import { FlatList, ListView, ScrollView, TouchableHighlight, Alert, View, KeyboardAvoidingView, StatusBar, Keyboard } from 'react-native';
 import {fetchTasksAction, createTaskAction, deleteSelectedTasksAction, } from '../actions/taskActions';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -17,6 +17,7 @@ class TodoList extends Component {
     this.state = {loading: true, taskText: ''};
     this.saveTask = this.saveTask.bind(this);
     this.deleteSelectedTasks = this.deleteSelectedTasks.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +35,6 @@ class TodoList extends Component {
       return { loading: false, taskText: previousState.taskText };
     });
   }
-
   saveTask(){
     var taskText = this.state.taskText;
     if(taskText == ''){
@@ -44,8 +44,22 @@ class TodoList extends Component {
     this.props.dispatch(createTaskAction(taskText));
     this.setState({taskText: ''});
     this.taskTextInput.setNativeProps({text: ''});
+    //console.log(this.todoList._root);
+    this.scrollToBottom();
+  //  this.todoList._root.setNativeProps({inverted: true});
   }
+  scrollToBottom(animated = true) {
+    if (this.todoList._root.listHeight && this.todoList._root.footerY && this.todoList._root.footerY > this.todoList._root.listHeight) {
+      // Calculates the y scroll position inside the ListView
+      const scrollTo = this.footerY - this.listHeight
 
+      // Scroll that sucker!
+      this.todoList._root.scrollTo({
+        y: scrollTo,
+        animated: animated,
+      })
+    }
+  }
   deleteSelectedTasks(){
     this.props.dispatch(deleteSelectedTasksAction(this.props.selectedTasks));
   //  Alert.alert("You are about to delete "+this.props.selectedTasks.length+" tasks");
@@ -59,9 +73,8 @@ class TodoList extends Component {
     var deleteButton;
     if(this.props.selectedTasks.length>0){
       deleteButton =
-      <Button onPress={this.deleteSelectedTasks} iconLeft danger>
+      <Button onPress={this.deleteSelectedTasks} iconLeft transparent>
         <Icon name='trash' />
-        <Text>{this.props.selectedTasks.length}</Text>
       </Button>;
     }
     return (
@@ -78,6 +91,7 @@ class TodoList extends Component {
 
         <KeyboardAvoidingView behavior="padding" style={{flex: 1, flexDirection: 'column'}}>
         <List style={{flex: 1}}
+            ref={(el) => {this.todoList = el}}
             dataArray={this.props.tasks}
             renderRow={(data) =>
               <TaskItem task={data} />
@@ -92,12 +106,9 @@ class TodoList extends Component {
            <Button style={{width: 70}} onPress={this.saveTask} primary><Text>Save</Text></Button>
         </View>
         </KeyboardAvoidingView>
-
       </Container>
-
     );
   }
-
 }
 
 const mapStateToProps = function(state){

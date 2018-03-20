@@ -12,7 +12,7 @@ const App = () => (
   <Provider store={store}>
     <Router>
       <Stack key="root">
-        <Scene key="home" component={TodoList} initial/>
+        <Scene key="todolist" component={TodoList} initial/>
       </Stack>
     </Router>
   </Provider>

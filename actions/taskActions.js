@@ -37,12 +37,12 @@ export function createTaskAction(text){
   )
 }
 
-export function createTaskSuccessAction(taskId){
+export function createTaskSuccessAction(task){
   console.log('Action: create task success');
   return (
     {
       type: 'CREATE_TASK_SUCCESS',
-      taskId: taskId
+      task: task
     }
   )
 }
@@ -88,11 +88,12 @@ export function deleteSelectedTasksAction(selectedTasks){
 }
 
 
-export function deleteSelectedTasksSuccessAction(){
+export function deleteSelectedTasksSuccessAction(deletedTasks){
   console.log('Action: delete selected tasks success');
   return (
     {
       type: 'DELETE_SELECTED_TASKS_SUCCESS',
+      deletedTasks: deletedTasks
     }
   )
 }

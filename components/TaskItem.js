@@ -36,7 +36,11 @@ class TaskItem extends Component {
 
   render() {
     return (
-        <ListItem onLongPress={this.selectTask} onPress={this.deselectTask}
+        <ListItem onLongPress={this.selectTask}
+          onPress={this.props.areTasksSelected
+            &&!this.props.selected
+            ?this.selectTask
+            :this.deselectTask}
         style={this.props.selected?styles.selectedListItem:styles.listItem} key={this.props.task.id}>
             <Text>{this.props.task.text}</Text>
         </ListItem>
@@ -46,7 +50,15 @@ class TaskItem extends Component {
 }
 const mapStateToProps = function(state, ownProps){
   if(typeof state.taskList.selectedTasks == 'undefined') return state;
-  return {selected: state.taskList.selectedTasks.includes(ownProps.task)}
+  if(typeof state.taskList.task != 'undefined'){
+    if(ownProps.task == state.taskList.task){
+      return {selected: state.taskList.selectedTasks.includes(ownProps.task),
+              areTasksSelected: state.taskList.selectedTasks.length>0,
+              task: state.taskList.task}
+    }
+  }
+  return {selected: state.taskList.selectedTasks.includes(ownProps.task),
+          areTasksSelected: state.taskList.selectedTasks.length>0}
 }
 
 const styles = StyleSheet.create({
@@ -54,7 +66,8 @@ const styles = StyleSheet.create({
   },
   selectedListItem: {
     backgroundColor: '#d3d3d3',
-    marginLeft: 0
+    marginLeft: 0,
+    paddingLeft: 20
   },
   activeTitle: {
     color: 'red',

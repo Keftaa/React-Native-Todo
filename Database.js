@@ -32,7 +32,14 @@ class Database  {
            tx => {
              tx.executeSql('INSERT INTO task (text) VALUES (?)', [taskText],
              function success(transaction, resultSet){
-               resolve(resultSet.insertId);
+               tx.executeSql('SELECT * FROM task WHERE id = ?', [resultSet.insertId],
+             function success(transaction, resultSet){
+               resolve(resultSet.rows._array[0]);
+             },
+             function fail(transaction, error){
+               reject(error.message);
+             });
+
              },
              function fail(transaction, error){
                reject(error.message);
@@ -54,7 +61,7 @@ class Database  {
             tx.executeSql('DELETE FROM task WHERE id IN ('+taskListToSqlWhere+')', [],
             function success(transaction, resultSet){
               console.log('tasks supposedly deleted');
-              resolve();
+              resolve(resultSet.rows._array);
             },
             function fail(transaction, error){
               reject(error.message);

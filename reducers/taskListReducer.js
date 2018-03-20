@@ -32,7 +32,7 @@ const taskListReducer = function(state = initialState, action) {
     case "DESELECT_TASK":
       return {
         tasks: state.tasks,
-        selectedTasks: state.selectedTasks.filter(a => a !== action.task) 
+        selectedTasks: state.selectedTasks.filter(a => a !== action.task)
       }
     case "DELETE_SELECTED_TASKS":
     console.log(action.selectedTasks);
@@ -43,11 +43,18 @@ const taskListReducer = function(state = initialState, action) {
     case "DELETE_SELECTED_TASKS_SUCCESS":
       return {
         selectedTasks: [],
-        tasks: state.tasks
+        tasks: state.tasks.filter(a => !action.deletedTasks.includes(a))
       }
     case "DELETE_SELECTED_TASKS_FAIL":
       return {
         lastErrorMessage: action.errorMessage,
+      }
+    case "CREATE_TASK_SUCCESS":
+    console.log('action task', action.task);
+      return {
+        tasks: state.tasks.concat(action.task),
+        selectedTasks: state.selectedTasks,
+        task: action.task
       }
     default:
       return state;
