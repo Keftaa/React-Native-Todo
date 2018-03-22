@@ -5,17 +5,26 @@ import { DrawerNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import { Dimensions, StatusBar, View } from 'react-native';
-import Navigator from './Navigator';
+import Drawer from './components/Drawer';
 
-export default class App extends Component {
+
+export const Navigator = new DrawerNavigator({
+  TodoList: { screen: TodoList },
+  TodoLis2: { screen: TodoList }
+},{
+  initialRouteName: 'TodoList',
+  contentComponent: Drawer
+})
+
+class Nav extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <Navigator />
-      </Provider>
-    );
+      <Navigator />
+    )
   }
 }
+
+export default Nav;
 
 export function getWidth(){
   return Dimensions.get('window').width;

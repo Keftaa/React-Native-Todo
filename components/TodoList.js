@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right,
-Body, Icon, Text, List, ListItem, Input } from 'native-base';
+Body, Icon, Text, List, ListItem, Input, Drawer } from 'native-base';
 import Database from '../Database';
 import { FlatList, ListView, ScrollView, TouchableHighlight, Alert, View, KeyboardAvoidingView, StatusBar, Keyboard } from 'react-native';
 import {fetchTasksAction, createTaskAction, deleteSelectedTasksAction, } from '../actions/taskActions';
@@ -9,18 +9,19 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Expo from 'expo';
 import { getWidth, getHeight } from '../App';
 import TaskItem from './TaskItem';
-
 class TodoList extends Component {
-  static navigationOptions = { title: 'Welcome', header: null };
+  static navigationOptions = { title: 'Todo' };
   constructor(props) {
     super(props);
     this.state = {loading: true, taskText: ''};
     this.saveTask = this.saveTask.bind(this);
     this.deleteSelectedTasks = this.deleteSelectedTasks.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.openDrawer = this.openDrawer.bind(this);
   }
 
   componentDidMount() {
+
     Alert.alert("مرحبا",
     "هذا التطبيق هو أجدد تطبيق قامت دولة عدنانستان بتصميمه على الإطلاق. إنّه تطيق تودو الجديد كلّياً. ينبع تصميم و محتوى هذا التطبيق السّلس و العصري من خبرة تفوق الثلاثة أيّام. \n\nاستمتع!");
      this.props.dispatch(fetchTasksAction());
@@ -61,8 +62,13 @@ class TodoList extends Component {
     }
   }
   deleteSelectedTasks(){
+
     this.props.dispatch(deleteSelectedTasksAction(this.props.selectedTasks));
   //  Alert.alert("You are about to delete "+this.props.selectedTasks.length+" tasks");
+  }
+
+  openDrawer(){
+    this.props.navigation.navigate('DrawerToggle');
   }
 
   render() {
@@ -80,14 +86,19 @@ class TodoList extends Component {
     return (
       <Container>
             <StatusBar hidden={true} />
-        <Header>
-          <Body>
-            <Title>Todo</Title>
-          </Body>
-          <Right>
-            {deleteButton}
-          </Right>
-        </Header>
+            <Header>
+  <Left>
+    <Button transparent onPress={this.openDrawer}>
+      <Icon name='menu' />
+    </Button>
+  </Left>
+  <Body>
+    <Title>Todo</Title>
+  </Body>
+  <Right>
+    {deleteButton}
+  </Right>
+</Header>
 
         <KeyboardAvoidingView behavior="padding" style={{flex: 1, flexDirection: 'column'}}>
         <List style={{flex: 1}}

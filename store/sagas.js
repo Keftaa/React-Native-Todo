@@ -1,6 +1,5 @@
 import { call, put, takeEvery, takeLatest, fork } from 'redux-saga/effects'
 import {Keyboard} from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import Database from '../Database';
 import {
   fetchTasksAction, fetchTasksSuccessAction, fetchTasksFailAction,
